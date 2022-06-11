@@ -1,4 +1,4 @@
-# jotto
+# Catalog
 
 Project 1 for CPSC 449 Web Back-End Engineering by Prof. Avery at California State University, Fullerton
 
@@ -8,9 +8,6 @@ Project 1 for CPSC 449 Web Back-End Engineering by Prof. Avery at California Sta
 
 + [Hacker News][2]
 
-[1]: https://roadmap.sh/backend
-
-[2]: https://news.ycombinator.com/item?id=18961793
 
 ## Additional Reading
 
@@ -18,14 +15,10 @@ Project 1 for CPSC 449 Web Back-End Engineering by Prof. Avery at California Sta
 
 + [Introduction to architecting systems for scale][4] by Will Larson
 
-[3]: https://medium.com/storyblocks-engineering/web-architecture-101-a3224e126947
-
-[4]: https://lethain.com/introduction-to-architecting-systems-for-scale/
-
 
 ## HTTP from the Terminal
 
-HTTPie is a command-line HTTP client that is primarily used for accessing web APIs. This isa good alternative to using a web browser, which is a graphical HTTP client, because commands are precise and repeatable.
+`HTTPie` is a command-line HTTP client that is primarily used for accessing web APIs from the terminal. This is another alternative for a web browser, which is a graphical HTTP client. Commands are precise and repeatable as they are executed from a shell.
 
 #### Getting Started
 
@@ -84,8 +77,10 @@ HTTPie is a command-line HTTP client that is primarily used for accessing web AP
 
 https://missing.csail.mit.edu
 
-
-
+[1]: https://roadmap.sh/backend
+[2]: https://news.ycombinator.com/item?id=18961793
+[3]: https://medium.com/storyblocks-engineering/web-architecture-101-a3224e126947
+[4]: https://lethain.com/introduction-to-architecting-systems-for-scale/
 [5]: https://httpie.io/cli
 [6]: https://catalog.fullerton.edu/
 [7]: https://firefox-source-docs.mozilla.org/devtools-user/page_inspector/index.html
