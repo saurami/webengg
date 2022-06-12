@@ -37,22 +37,30 @@ Practice exercise for CPSC 449 Web Back-End Engineering by Prof. Avery at Califo
 
 + Enter keyword "CPSC 449" in the search box and open [Network Monitor][8]
 
-+ Click the "search" icon and view the request to domain [catalog.fullerton.edu][6]:
-
-  `GET https://catalog.fullerton.edu/search_advanced.php?cur_cat_oid=75&search_database=Search&search_db=Search&cpage=1&ecpage=1&ppage=1&spage=1&tpage=1&location=33&filter[keyword]=CPSC 449&filter[exact_match]=1`
-
-+ Additionally, [translate][10] the GET request to an equivalent cURL
-
-  `curl 'https://catalog.fullerton.edu/search_advanced.php?cur_cat_oid=75&search_database=Search&search_db=Search&cpage=1&ecpage=1&ppage=1&spage=1&tpage=1&location=33&filter%5Bkeyword%5D=CPSC%20449&filter%5Bexact_match%5D=1'`
-
-+ Create shell script which uses `httpie` to make the search keyword extendible
++ Click the "search" icon and view the request to domain [catalog.fullerton.edu][6]. For "CPSC 449" its:
 
   ```
-  course="${1}"
+  GET https://catalog.fullerton.edu/search_advanced.php?cur_cat_oid=75&search_database=Search&search_db=Search&cpage=1&ecpage=1&ppage=1&spage=1&tpage=1&location=33&filter[keyword]=CPSC 449&filter[exact_match]=1
+  ```
 
++ Additionally, [translate][10] the GET request to an equivalent `curl`:
+
+  ```
+  curl "https://catalog.fullerton.edu/search_advanced.php?\
+  cur_cat_oid=75&\search_database=Search&search_db=Search&\
+  cpage=1&ecpage=1&ppage=1&spage=1&tpage=1&\
+  location=33&filter%5Bkeyword%5D=CPSC%20449&filter%5Bexact_match%5D=1" \
+    | grep "Best Match:"
+  ```
+
++ `http` equivalent of the above `curl`:
+
+  ```
   http GET https://catalog.fullerton.edu/search_advanced.php \
-    cur_cat_oid==75 search_database==Search search_db==Search cpage==1 ecpage==1 ppage==1 spage==1 \
-    tpage==1 location==33 filter\[keyword\]=="CPSC $course" filter\[exact_match\]==1 | grep "Best Match:"
+    cur_cat_oid==75 search_database==Search search_db==Search \
+    cpage==1 ecpage==1 ppage==1 spage==1 tpage==1 \
+    location==33 filter\[keyword\]=="CPSC $course" filter\[exact_match\]==1 \
+      | grep "Best Match:"
   ```
 
 + Make the script executable:
