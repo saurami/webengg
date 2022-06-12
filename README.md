@@ -1,6 +1,6 @@
 # Catalog
 
-Project 1 for CPSC 449 Web Back-End Engineering by Prof. Avery at California State University, Fullerton
+Practice exercise for CPSC 449 Web Back-End Engineering by Prof. Avery at California State University, Fullerton
 
 ## Getting Started
 
@@ -9,26 +9,19 @@ Project 1 for CPSC 449 Web Back-End Engineering by Prof. Avery at California Sta
 + [Hacker News][2]
 
 
-## Additional Reading
-
-+ [Web Architecture 101][3] from the Storyblocks Product & Engineering blog
-
-+ [Introduction to architecting systems for scale][4] by Will Larson
-
-
 ## HTTP from the Terminal
 
-`HTTPie` is a command-line HTTP client that is primarily used for accessing web APIs from the terminal. This is another alternative for a web browser, which is a graphical HTTP client. Commands are precise and repeatable as they are executed from a shell.
+[HTTPie][5] is a command-line HTTP client that is primarily used for accessing web APIs. This is an alternative to using a web browser, which is a graphical HTTP client. The former has advantages because commands are precise and repeatable.
 
 #### Getting Started
 
-+ Install [HTTPie][5]
++ Install HTTPie
 
-+ Ensure that [https://catalog.fullerton.edu/][6] webpage can be retrieved using `httpie`
++ Ensure that CSUF's [course catalog][6] webpage can be retrieved using HTTPie
 
   `http GET https://catalog.fullerton.edu/`
 
-#### Next Steps
+#### Exercise
 
 + Using the browser's [Page Inspector][7] and / or [Network Monitor][8] find "Catalog Search"
 
@@ -40,15 +33,15 @@ Project 1 for CPSC 449 Web Back-End Engineering by Prof. Avery at California Sta
 
   `./catalog.sh 349`
 
-### Solution
+#### Solution
 
 + Enter keyword "CPSC 449" in the search box and open [Network Monitor][8]
 
-+ Click the "search" icon and view the request to domain [catalog.fullerton.edu][9]:
++ Click the "search" icon and view the request to domain [catalog.fullerton.edu][6]:
 
   `GET https://catalog.fullerton.edu/search_advanced.php?cur_cat_oid=75&search_database=Search&search_db=Search&cpage=1&ecpage=1&ppage=1&spage=1&tpage=1&location=33&filter[keyword]=CPSC 449&filter[exact_match]=1`
 
-+ Additionally, translate the GET request to an equivalent cURL ([ref][9])
++ Additionally, [translate][10] the GET request to an equivalent cURL
 
   `curl 'https://catalog.fullerton.edu/search_advanced.php?cur_cat_oid=75&search_database=Search&search_db=Search&cpage=1&ecpage=1&ppage=1&spage=1&tpage=1&location=33&filter%5Bkeyword%5D=CPSC%20449&filter%5Bexact_match%5D=1'`
 
@@ -71,11 +64,18 @@ Project 1 for CPSC 449 Web Back-End Engineering by Prof. Avery at California Sta
   `./catalog.sh CPSC_IDENTIFIER`
 
 
+## Additional Reading
+
++ [Web Architecture 101][3] from the Storyblocks Product & Engineering blog
+
++ [Introduction to architecting systems for scale][4] by Will Larson
+
+
 ---
 
 **Miscellaneous**
 
-https://missing.csail.mit.edu
++ [Missing Semester][11]
 
 [1]: https://roadmap.sh/backend
 [2]: https://news.ycombinator.com/item?id=18961793
@@ -86,4 +86,5 @@ https://missing.csail.mit.edu
 [7]: https://firefox-source-docs.mozilla.org/devtools-user/page_inspector/index.html
 [8]: https://firefox-source-docs.mozilla.org/devtools-user/network_monitor/index.html
 [9]: https://bash.cyberciti.biz/guide/$1
-[6]: https://en.wikipedia.org/wiki/Percent-encoding
+[10]: https://en.wikipedia.org/wiki/Percent-encoding
+[11]: https://missing.csail.mit.edu
