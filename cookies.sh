@@ -1,15 +1,12 @@
 http "httpbin.org/cookies/set?page=1" "Cookie:user=foo" --session=./foo.json > /dev/null
-user_foo_page=$(jq --raw-output '.cookies[] | select(.name=="page") | .value' ./foo.json)
-http "jsonplaceholder.typicode.com/posts?_page=$user_foo_page&_limit=25" > /dev/null
-
+foo_page=$(jq --raw-output '.cookies[] | select(.name=="page") | .value' ./foo.json)
+http "jsonplaceholder.typicode.com/posts?_page=$foo_page&_limit=25" > /dev/null
 
 http "httpbin.org/cookies/set?page=2" --session=./foo.json > /dev/null
-user_foo_updated_age=$(jq --raw-output '.cookies[] | select(.name=="page") | .value' ./foo.json)
-http "jsonplaceholder.typicode.com/posts?_page=$user_foo_updated_age&_limit=25" > /dev/null
-
+foo_page_updated=$(jq --raw-output '.cookies[] | select(.name=="page") | .value' ./foo.json)
+http "jsonplaceholder.typicode.com/posts?_page=$foo_page_updated&_limit=25" > /dev/null
 
 http "httpbin.org/cookies/set?page=3&user=bar" --session=./bar.json > /dev/null
-foo_page_updated=$(jq --raw-output '.cookies[] | select(.name=="page") | .value' ./foo.json)
 bar_page=$(jq --raw-output '.cookies[] | select(.name=="page") | .value' ./bar.json)
 
 foobar1(){
