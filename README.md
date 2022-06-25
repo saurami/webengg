@@ -48,12 +48,14 @@ Command lines tools ([HTTPie][1] and [jq][3]) will be used to glue two different
 
 #### Exercise
 
+Do these in session file `foo.json`
+
 + Use HTTPBin to set a cookie named page for user foo to 1
 + Retrieve the page set in the cookie and use it for paginating JSONPlaceholder.
 + Use HTTPBin to set the page for user foo to 2.
 + Retrieve the page set in the cookie and use it for paginating JSONPlaceholder.
 
-  (Do this in a new session file named bar.json.)
+Do these in a new session file `bar.json`
 
 + Use HTTPBin to set a cookie named page for user bar to 3.
 + Retrieve pages for both users to verify that user foo sees page 2 while user bar sees page 3.
