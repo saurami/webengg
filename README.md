@@ -38,49 +38,44 @@ Command lines tools ([HTTPie][1] and [jq][3]) will be used to glue two different
 + Observation: Based on the [cookie storage behavior][6], domain value is set when the `Set-Cookie` header is passed. In this case, it is passed with query string `page=1`
 
   ```
-  http httpbin.org/cookies/set?page=1 Cookie:user=foo --session=./foo.json
+  http "httpbin.org/cookies/set?page=1" "Cookie:user=foo" --session=./foo.json
   cat foo.json
   ```
 
   This means that the **domain field is empty** when the below request is sent:
 
-  `http httpbin.org/cookies 'Cookie:user=foo;page=1' --session=./biz.json`
+  `http "httpbin.org/cookies" "Cookie:user=foo;page=1" --session=./biz.json`
 
 + Retrieve page in cookie for pagination in JSONPlaceholder
 
   ```
-  userFooPage=$(jq --raw-output '.cookies[1].value//empty' ./foo.json)
-  echo $userFooPage
-  http "jsonplaceholder.typicode.com/posts?_page=$userFooPage&_limit=25"
+  user_foo_page=$(jq --raw-output '.cookies[] | select(.name=="page") | .value' ./foo.json)
+  echo $user_foo_page
+  http "jsonplaceholder.typicode.com/posts?_page=$user_foo_page&_limit=25"
   ```
 
 + Set (update) `page` for user *foo* to 2
 
-  `http httpbin.org/cookies/set?page=2 --session=./foo.json`
+  `http "httpbin.org/cookies/set?page=2" --session=./foo.json`
 
 + Retrieve page set in cookie from JSONPlaceholder
 
   ```
-  userFooUpdatedPage=$(jq --raw-output '.cookies[1].value//empty' ./foo.json)
-  echo $userFooUpdatedPage
-  http "jsonplaceholder.typicode.com/posts?_page=$userFooUpdatedPage&_limit=25"
+  user_foo_updated_age=$(jq --raw-output '.cookies[] | select(.name=="page") | .value' ./foo.json)
+  echo $user_foo_updated_age
+  http "jsonplaceholder.typicode.com/posts?_page=$user_foo_updated_age&_limit=25"
   ```
 
 + Set a cookie named page for user bar to 3
 
-  `http httpbin.org/cookies 'Cookie:user=bar;page=3' --session=.\bar.json`
+  `http "httpbin.org/cookies/set?page=3&user=bar" --session=./bar.json`
 
 + Retrieve pages for users foo and bar
 
   ```
-  foo_page=$(jq --raw-output '.cookies[1].value//empty' ./foo.json)
-  bar_page=$(jq --raw-output '.cookies[1].value//empty' ./bar.json)
+  foo_page=$(jq --raw-output '.cookies[] | select(.name=="page") | .value' ./foo.json)
+  bar_page=$(jq --raw-output '.cookies[] | select(.name=="page") | .value' ./bar.json)
   ```
-
-+ Asserting that pages are different for both users
-
-  `todo`
-
 
 ---
 
