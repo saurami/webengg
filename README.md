@@ -2,102 +2,92 @@
 
 Practice exercise for CPSC 449 Web Back-End Engineering by Prof. Avery at California State University, Fullerton.
 
-The goal of this exercise is to learn using a command-line utility.
+The goal of this exercise is to see low-level details of how a [stateless HTTP application][1] can [remember][2] the current state of a user's interactions.
 
 
-## HTTP from the Terminal
+## Cookies from the Terminal
 
-[HTTPie][5] is a command-line HTTP client that is primarily used for accessing web APIs. This is an alternative to using a web browser, which is a graphical HTTP client. The former has advantages because commands are precise and repeatable.
+Command lines tools ([HTTPie][1] and [jq][3]) will be used to glue two different public web APIs ([HTTPBin][4] and [JSONPlaceholder][5]) to remember which page a user is currently viewing.
+
 
 #### Getting Started
 
-+ Install HTTPie
++ Install HTTPie and jq
 
-+ Navigate to CSUF's [course catalog][6] using a web browser
 
-+ Type "CPSC 449" in the *Search Catalog* box
 
-+ Open the browser's [Network Monitor][8] (using `F12`)
 
-+ Search for "CPSC 449" using the search icon and watch the network monitor tab
-
-+ Analyze the `GET` method for domain `catalog.fullerton.edu` having type `html`
 
 #### Exercise
 
-+ Ensure that CSUF's [course catalog][6] webpage can be retrieved using the command-line utility
++ Use HTTPBin to set a cookie named page for user foo to 1
++ Retrieve the page set in the cookie and use it for paginating JSONPlaceholder.
++ Use HTTPBin to set the page for user foo to 2.
++ Retrieve the page set in the cookie and use it for paginating JSONPlaceholder.
 
-+ Use HTTPie to submit the form containing the search for "CPSC 449"
+  (Do this in a new session file named bar.json.)
 
-+ Pipe the above output to `grep` in order to search for string "Best Match:" (**Note**: This should print the line containing the title of the course.)
++ Use HTTPBin to set a cookie named page for user bar to 3.
++ Retrieve pages for both users to verify that user foo sees page 2 while user bar sees page 3.
++ Use HTTPBin to set the page for user bar to 4.
++ Retrieve pages for both users to verify that foo is still on page 2 while bar is on page 4.
 
-+ Combine the previous two steps into a shell script with a [positional parameter][9] that can be used to search another course, e.g.
-
-  `./catalog.sh 349`
 
 #### Solution
 
-+ `http` for retrieving the course catalog webpage
-
-  `http GET https://catalog.fullerton.edu/`
-
-+ Search request from the Network Monitor tab
++ Observation: Based on the [cookie storage behavior][6], domain value is set when the `Set-Cookie` header is passed. In this case, it is passed with query string `page=1`
 
   ```
-  GET https://catalog.fullerton.edu/search_advanced.php?cur_cat_oid=75&search_database=Search&search_db=Search&cpage=1&ecpage=1&ppage=1&spage=1&tpage=1&location=33&filter[keyword]=CPSC 449&filter[exact_match]=1
+  http httpbin.org/cookies/set?page=1 Cookie:user=foo --session=./foo.json
+  cat foo.json
   ```
 
-+ GET request into [equivalent][10] `curl`
+  This means that the **domain field is empty** when the below request is sent:
+
+  `http httpbin.org/cookies 'Cookie:user=foo;page=1' --session=./biz.json`
+
++ Retrieve page in cookie for pagination in JSONPlaceholder
 
   ```
-  curl "https://catalog.fullerton.edu/search_advanced.php?\
-  cur_cat_oid=75&\search_database=Search&search_db=Search&\
-  cpage=1&ecpage=1&ppage=1&spage=1&tpage=1&\
-  location=33&filter%5Bkeyword%5D=CPSC%20449&filter%5Bexact_match%5D=1"
+  userFooPage=$(jq --raw-output '.cookies[1].value//empty' ./foo.json)
+  echo $userFooPage
+  http "jsonplaceholder.typicode.com/posts?_page=$userFooPage&_limit=25"
   ```
 
-+ `http` equivalent of the above `curl` with filtered output using `grep`:
++ Set (update) `page` for user *foo* to 2
+
+  `http httpbin.org/cookies/set?page=2 --session=./foo.json`
+
++ Retrieve page set in cookie from JSONPlaceholder
 
   ```
-  http GET https://catalog.fullerton.edu/search_advanced.php \
-    cur_cat_oid==75 search_database==Search search_db==Search \
-    cpage==1 ecpage==1 ppage==1 spage==1 tpage==1 \
-    location==33 filter\[keyword\]=="CPSC 449" filter\[exact_match\]==1 \
-      | grep "Best Match:"
+  userFooUpdatedPage=$(jq --raw-output '.cookies[1].value//empty' ./foo.json)
+  echo $userFooUpdatedPage
+  http "jsonplaceholder.typicode.com/posts?_page=$userFooUpdatedPage&_limit=25"
   ```
 
-+ Script usage:
++ Set a cookie named page for user bar to 3
+
+  `http httpbin.org/cookies 'Cookie:user=bar;page=3' --session=.\bar.json`
+
++ Retrieve pages for users foo and bar
 
   ```
-  chmod +x ./catalog.sh
-  ./catalog.sh CPSC_IDENTIFIER
+  foo_page=$(jq --raw-output '.cookies[1].value//empty' ./foo.json)
+  bar_page=$(jq --raw-output '.cookies[1].value//empty' ./bar.json)
   ```
 
-## Additional Reading
++ Asserting that pages are different for both users
 
-+ [Backend Developer Roadmap][1]
-
-+ [Hacker News][2]
-
-+ [Web Architecture 101][3] from the Storyblocks Product & Engineering blog
-
-+ [Introduction to architecting systems for scale][4] by Will Larson
+  `todo`
 
 
 ---
 
-**Miscellaneous**
 
-+ [Missing Semester][11]
-
-[1]: https://roadmap.sh/backend
-[2]: https://news.ycombinator.com/item?id=18961793
-[3]: https://medium.com/storyblocks-engineering/web-architecture-101-a3224e126947
-[4]: https://lethain.com/introduction-to-architecting-systems-for-scale/
-[5]: https://httpie.io/cli
-[6]: https://catalog.fullerton.edu/
-[7]: https://firefox-source-docs.mozilla.org/devtools-user/page_inspector/index.html
-[8]: https://firefox-source-docs.mozilla.org/devtools-user/network_monitor/index.html
-[9]: https://bash.cyberciti.biz/guide/$1
-[10]: https://en.wikipedia.org/wiki/Percent-encoding
-[11]: https://missing.csail.mit.edu
+[1]: https://httpie.io/
+[2]: https://httpie.io/docs/cli/sessions
+[3]: https://stedolan.github.io/jq/
+[4]: https://httpbin.org/
+[5]: https://jsonplaceholder.typicode.com/
+[6]: https://httpie.io/docs/cli/cookie-storage-behavior
