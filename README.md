@@ -77,6 +77,13 @@ Command lines tools ([HTTPie][1] and [jq][3]) will be used to glue two different
   bar_page=$(jq --raw-output '.cookies[] | select(.name=="page") | .value' ./bar.json)
   ```
 
++ Script Usage
+
+  ```
+  chmod +x ./cookies.sh
+  ./cookies.sh
+  ```
+
 ---
 
 
