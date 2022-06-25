@@ -1,4 +1,4 @@
-# Catalog
+# Cookies
 
 Practice exercise for CPSC 449 Web Back-End Engineering by Prof. Avery at California State University, Fullerton.
 
@@ -14,9 +14,37 @@ Command lines tools ([HTTPie][1] and [jq][3]) will be used to glue two different
 
 + Install HTTPie and jq
 
++ Ensure that `http` can be used to retrieve HTTPBin endpoints
 
+  ```
+  http httpbin.org/status/418
+  http POST httpbin.org/post test=true
+  ```
 
++ HTTPBin provides server-side support for cookies, but does not store them. This means that the `Cookie:` request header is not part of it's response, even though `Set-Cookie:` is allowed in the request
 
+  ```
+  http "httpbin.org/cookies"                     # retrieve
+  http "httpbin.org/cookies/set?username=foo"    # set cookie
+  http "httpbin.org/cookies"                     # retrieve again
+  ```
+
++ Explicitly adding the `Cookie:` header also doesn't persist the value
+
+  ```
+  http "httpbin.org/cookies" "Cookie:username=foo"    # set cookie
+  http "httpbin.org/cookies"                          # retrieve again
+  ```
+
++ Cookie headers in the request are not required by web browsers. To emulate cookies, HTTPie's [named sessions][6] can be used with the `--session` flag.
+
+  ```
+  http "httpbin.org/cookies" --session=./foo.json                     # retrieve
+  http "httpbin.org/cookies/set?username=foo" --session=./foo.json    # set cookie
+  http "httpbin.org/cookies" --session=./foo.json                     # retrieve again
+  ```
+
++ As per [docs][7], the `domain` field binds cookies to a specified hostname and it's subdomains. If the `domain` field is `null`, the cookie is unbound i.e., it is available to all hosts, including cross-domain redirect chains.
 
 #### Exercise
 
@@ -35,7 +63,7 @@ Command lines tools ([HTTPie][1] and [jq][3]) will be used to glue two different
 
 #### Solution
 
-+ Observation: Based on the [cookie storage behavior][6], domain value is set when the `Set-Cookie` header is passed. In this case, it is passed with query string `page=1`
++ Observation: Based on the [cookie storage behavior][8], domain value is set when the `Set-Cookie` header is passed. In this case, it is passed with query string `page=1`
 
   ```
   http "httpbin.org/cookies/set?page=1" "Cookie:user=foo" --session=./foo.json
@@ -92,4 +120,6 @@ Command lines tools ([HTTPie][1] and [jq][3]) will be used to glue two different
 [3]: https://stedolan.github.io/jq/
 [4]: https://httpbin.org/
 [5]: https://jsonplaceholder.typicode.com/
-[6]: https://httpie.io/docs/cli/cookie-storage-behavior
+[6]: https://httpie.io/docs/cli/named-sessions
+[7]: https://httpie.io/docs/cli/host-based-cookie-policy
+[8]: https://httpie.io/docs/cli/cookie-storage-behavior
