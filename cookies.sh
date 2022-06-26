@@ -4,6 +4,8 @@ foo_page=$(jq --raw-output '.cookies[] | select(.name=="page") | .value' ./foo.j
 echo "Value of foo page is"
 echo $foo_page
 echo "$foo_page"
+echo ${foo_page}
+echo "${foo_page}"
 http "jsonplaceholder.typicode.com/posts?_page=$foo_page&_limit=25" > /dev/null
 
 http "httpbin.org/cookies/set?page=2" --session=./foo.json > /dev/null
