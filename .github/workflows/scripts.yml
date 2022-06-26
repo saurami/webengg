@@ -20,6 +20,9 @@ jobs:
           chmod +x ./catalog.sh
           chmod +x ./cookies.sh
 
+      - name: Install packages
+        run: sudo apt install httpie
+
       - name: Execute scripts
         shell: bash
         run: |
