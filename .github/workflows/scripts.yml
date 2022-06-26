@@ -20,12 +20,14 @@ jobs:
 
       - name: Make scripts executable
         run: |
+          which zsh
+          chsh -s $(which zsh)
           chmod +x ./catalog.sh
           chmod +x ./cookies.sh
 
       - name: Execute scripts
         run: |
-          which zsh
+          chsh -s $(which zsh)
           echo "Running script for exercise 1 - HTTP from the terminal"
           ./catalog.sh 449
           echo "========================================================="
