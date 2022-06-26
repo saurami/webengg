@@ -1,4 +1,3 @@
-#!/usr/bin/zsh
 
 http "httpbin.org/cookies/set?page=1" "Cookie:user=foo" --session=./foo.json > /dev/null
 foo_page=$(jq --raw-output '.cookies[] | select(.name=="page") | .value' ./foo.json)
