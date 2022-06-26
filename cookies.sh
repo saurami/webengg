@@ -10,7 +10,7 @@ http "httpbin.org/cookies/set?page=3&user=bar" --session=./bar.json > /dev/null
 bar_page=$(jq --raw-output '.cookies[] | select(.name=="page") | .value' ./bar.json)
 
 foobar1(){
-	if [[ "$foo_page_updated" == 2 && "$bar_page" == 3 ]]; then
+	if [ "$foo_page_updated" == 2 && "$bar_page" == 3 ]; then
 		echo "[PASSED] Correct values of updated foo and initial bar"
 	else
 		echo "[FAILED] Incorrect values $foo_page_updated and $bar_page ..."
@@ -21,7 +21,7 @@ http "httpbin.org/cookies/set?page=4" --session=./bar.json > /dev/null
 bar_page_updated=$(jq --raw-output '.cookies[] | select(.name=="page") | .value' ./bar.json)
 
 foobar2(){
-	if [[ "$foo_page_updated" == 2 && "$bar_page_updated" == 4 ]]; then
+	if [ "$foo_page_updated" == 2 && "$bar_page_updated" == 4 ]; then
 		echo "[PASSED] Correct values of updated foo and updated bar"
 	else
 		echo "[FAILED] Incorrect values $foo_page_updated and $bar_page_updated ..."
