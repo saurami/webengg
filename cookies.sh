@@ -14,6 +14,9 @@ cat ./foo.json
 echo "\n"
 cat ./bar.json
 
+echo $foo_page_updated >> $GITHUB_ENV
+echo $bar_page >> $GITHUB_ENV
+
 foobar1(){
 	if [[ "$foo_page_updated" == 2 && "$bar_page" == 3 ]]; then
 		echo "[PASSED] Correct values of updated foo and initial bar"
@@ -24,6 +27,8 @@ foobar1(){
 
 http "httpbin.org/cookies/set?page=4" --session=./bar.json > /dev/null
 bar_page_updated=$(jq --raw-output '.cookies[] | select(.name=="page") | .value' ./bar.json)
+
+echo $bar_page_updated >> $GITHUB_ENV
 
 foobar2(){
 	if [[ "$foo_page_updated" == 2 && "$bar_page_updated" == 4 ]]; then
