@@ -1,4 +1,4 @@
-name: CI
+name: macOS
 
 on:
   push:
@@ -9,14 +9,14 @@ on:
 # A workflow run is made up of one or more jobs that can run sequentially or in parallel
 jobs:
   execute:
-    runs-on: ubuntu-latest
+    runs-on: macos-latest
 
     steps:
       - name: Checkout repository under $GITHUB_WORKSPACE
         uses: actions/checkout@v3
 
       - name: Install packages
-        run: sudo apt install zsh httpie jq
+        run: sudo /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
 
       - name: Make scripts executable
         run: |
