@@ -1,11 +1,5 @@
-
 http "httpbin.org/cookies/set?page=1" "Cookie:user=foo" --session=./foo.json > /dev/null
 foo_page=$(jq --raw-output '.cookies[] | select(.name=="page") | .value' ./foo.json)
-echo "Value of foo page is"
-echo $foo_page
-echo "$foo_page"
-echo ${foo_page}
-echo "${foo_page}"
 http "jsonplaceholder.typicode.com/posts?_page=$foo_page&_limit=25" > /dev/null
 
 http "httpbin.org/cookies/set?page=2" --session=./foo.json > /dev/null
@@ -14,13 +8,6 @@ http "jsonplaceholder.typicode.com/posts?_page=$foo_page_updated&_limit=25" > /d
 
 http "httpbin.org/cookies/set?page=3&user=bar" --session=./bar.json > /dev/null
 bar_page=$(jq --raw-output '.cookies[] | select(.name=="page") | .value' ./bar.json)
-
-cat ./foo.json
-echo "\n"
-cat ./bar.json
-
-echo $foo_page_updated >> $GITHUB_ENV
-echo $bar_page >> $GITHUB_ENV
 
 foobar1(){
 	if [[ "$foo_page_updated" == 2 && "$bar_page" == 3 ]]; then
@@ -32,8 +19,6 @@ foobar1(){
 
 http "httpbin.org/cookies/set?page=4" --session=./bar.json > /dev/null
 bar_page_updated=$(jq --raw-output '.cookies[] | select(.name=="page") | .value' ./bar.json)
-
-echo $bar_page_updated >> $GITHUB_ENV
 
 foobar2(){
 	if [[ "$foo_page_updated" == 2 && "$bar_page_updated" == 4 ]]; then
@@ -48,5 +33,6 @@ foobar1
 echo "Test 1 complete!"
 echo "----"
 echo "Testing updated foo and updated bar ..."
+
 foobar2
 echo "Test 2 complete!"
