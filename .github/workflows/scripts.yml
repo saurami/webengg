@@ -17,19 +17,15 @@ jobs:
 
       - name: Install packages
         run: |
-          brew install zsh httpie jq
-          #sudo /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
+          brew install zsh httpie
 
       - name: Make scripts executable
         run: |
-          which zsh
-          sudo chsh -s $(which zsh)
           chmod +x ./catalog.sh
           chmod +x ./cookies.sh
 
       - name: Execute scripts
         run: |
-          sudo chsh -s $(which zsh)
           echo "Running script for exercise 1 - HTTP from the terminal"
           ./catalog.sh 449
           echo "========================================================="
