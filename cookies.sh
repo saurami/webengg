@@ -11,6 +11,10 @@ http "jsonplaceholder.typicode.com/posts?_page=$foo_page_updated&_limit=25" > /d
 http "httpbin.org/cookies/set?page=3&user=bar" --session=./bar.json > /dev/null
 bar_page=$(jq --raw-output '.cookies[] | select(.name=="page") | .value' ./bar.json)
 
+cat ./foo.json
+echo "\n"
+cat ./bar.json
+
 foobar1(){
 	if [[ "$foo_page_updated" == 2 && "$bar_page" == 3 ]]; then
 		echo "[PASSED] Correct values of updated foo and initial bar"
