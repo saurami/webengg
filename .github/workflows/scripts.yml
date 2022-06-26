@@ -15,11 +15,8 @@ jobs:
       - name: Checkout repository under $GITHUB_WORKSPACE
         uses: actions/checkout@v3
 
-      - name: System packages and shell
-        run: sudo apt install zsh
-
       - name: Install packages
-        run: sudo apt install httpie jq
+        run: sudo apt install zsh httpie jq
 
       - name: Make scripts executable
         run: |
@@ -27,7 +24,6 @@ jobs:
           chmod +x ./cookies.sh
 
       - name: Execute scripts
-        shell: /usr/bin/zsh -e {0}
         run: |
           which zsh
           echo "Running script for exercise 1 - HTTP from the terminal"
